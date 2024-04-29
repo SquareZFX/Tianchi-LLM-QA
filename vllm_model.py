@@ -52,6 +52,7 @@ class ChatLLM(object):
                             tensor_parallel_size=1,
                             trust_remote_code=True,
                             gpu_memory_utilization=0.90,
+                            max_model_len=3072,
                             dtype="bfloat16")
        for stop_id in get_stop_words_ids(self.generation_config.chat_format, self.tokenizer):
             self.stop_words_ids.extend(stop_id)
@@ -96,7 +97,7 @@ class ChatLLM(object):
        return batch_response
 
 if __name__ == "__main__":
-    qwen7 = "/root/autodl-tmp/codes/pre_train_model/Qwen-7B-Chat"
+    qwen7 = "/mnt/workspace/Tianchi-LLM-QA/pre_train_model/Qwen-7B-Chat/qwen/Qwen-7B-Chat"
     start = time.time()
     llm = ChatLLM(qwen7)
     test = ["吉利汽车座椅按摩","吉利汽车语音组手唤醒","自动驾驶功能介绍"]

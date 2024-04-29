@@ -1,0 +1,1 @@
+./frpc/frpc -c ./frpc/frpc.toml

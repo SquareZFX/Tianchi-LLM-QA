@@ -1,0 +1,9 @@
+frpc/frpc.toml
+.ipynb_checkpoints/
+__pycache__/
+data/.ipynb_checkpoints/
+frpc/.ipynb_checkpoints/
+pre_train_model/.ipynb_checkpoints/
+pre_train_model/M3E-large/
+pre_train_model/Qwen-7B-Chat/qwen/
+pre_train_model/bge-reranker-large/

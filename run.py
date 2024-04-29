@@ -95,10 +95,10 @@ if __name__ == "__main__":
     # base = "/app"
     # qwen7 = "/tcdata/qwen/Qwen-7B-Chat"
 
-    base = "/root/autodl-tmp/codes"
-    qwen7 = base + "/pre_train_model/Qwen-7B-Chat"
-    m3e =  base + "/pre_train_model/m3e-large"
-    bge_reranker_large = base + "/pre_train_model/bge-reranker-large"
+    base = "/mnt/workspace/Tianchi-LLM-QA"
+    qwen7 = base + "/pre_train_model/Qwen-7B-Chat/qwen/Qwen-7B-Chat"
+    m3e =  base + "/pre_train_model/M3E-large/Jerry0/M3E-large"
+    bge_reranker_large = base + "/pre_train_model/bge-reranker-large/Xorbits/bge-reranker-large"
 
     # data
     # dp =  DataProcess(pdf_path = "/tcdata/trainning_data.pdf")

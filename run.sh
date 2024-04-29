@@ -1,1 +1,2 @@
-python /app/run.py
+export VLLM_USE_MODELSCOPE=false
+python ./run.py
