@@ -3,18 +3,23 @@
 
 
 from langchain.schema import Document
-from langchain.vectorstores import Chroma,FAISS
+from langchain.vectorstores import Chroma, FAISS
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from pdf_parse import DataProcess
 import torch
+
+
 # from bm25_retriever import BM25
 
 class FaissRetriever(object):
+    def __init__(self):
+        pass
+
     def __init__(self, model_path, data):
-        self.embeddings  = HuggingFaceEmbeddings(
-                               model_name = model_path,
-                               model_kwargs = {"device":"cuda"}
-                           )
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=model_path,
+            model_kwargs={"device": "cuda"}
+        )
         docs = []
         for idx, line in enumerate(data):
             line = line.strip("\n").strip()
@@ -24,24 +29,38 @@ class FaissRetriever(object):
         del self.embeddings
         torch.cuda.empty_cache()
 
+    def SaveLocalData(self, path):
+        self.vector_store.save_local(path)
+
+    def LoadLocalData(self, model_path, data_path):
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=model_path,
+            model_kwargs={"device": "cuda"}
+        )
+        self.vector_store = FAISS.load_local("faiss_index", self.embeddings)
+        del self.embeddings
+        torch.cuda.empty_cache()
+
     def GetTopK(self, query, k):
-       context = self.vector_store.similarity_search_with_score(query, k=k)
-       return context
+        context = self.vector_store.similarity_search_with_score(query, k=k)
+        return context
+
     def GetvectorStore(self):
         return self.vector_store
 
+
 if __name__ == "__main__":
     base = "/root/autodl-tmp/codes"
-    model_name=base + "/pre_train_model/m3e-large" #text2vec-large-chinese
-    dp =  DataProcess(pdf_path = base + "/data/train_a.pdf")
-    dp.ParseBlock(max_seq = 1024)
-    dp.ParseBlock(max_seq = 512)
+    model_name = base + "/pre_train_model/m3e-large"  # text2vec-large-chinese
+    dp = DataProcess(pdf_path=base + "/data/train_a.pdf")
+    dp.ParseBlock(max_seq=1024)
+    dp.ParseBlock(max_seq=512)
     print(len(dp.data))
-    dp.ParseAllPage(max_seq = 256)
-    dp.ParseAllPage(max_seq = 512)
+    dp.ParseAllPage(max_seq=256)
+    dp.ParseAllPage(max_seq=512)
     print(len(dp.data))
-    dp.ParseOnePageWithRule(max_seq = 256)
-    dp.ParseOnePageWithRule(max_seq = 512)
+    dp.ParseOnePageWithRule(max_seq=256)
+    dp.ParseOnePageWithRule(max_seq=512)
     print(len(dp.data))
     data = dp.data
 
