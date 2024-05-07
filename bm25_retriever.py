@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import pickle
 
 from langchain.retrievers import BM25Retriever
 from langchain.schema import Document
 from pdf_parse import DataProcess
 import jieba
 
+
 class BM25(object):
+    def __init__(self):
+        pass
 
     def __init__(self, documents):
 
@@ -15,7 +18,7 @@ class BM25(object):
         full_docs = []
         for idx, line in enumerate(documents):
             line = line.strip("\n").strip()
-            if(len(line)<5):
+            if (len(line) < 5):
                 continue
             tokens = " ".join(jieba.cut_for_search(line))
             # docs.append(Document(page_content=tokens, metadata={"id": idx, "cate":words[1],"pageid":words[2]}))
@@ -31,6 +34,12 @@ class BM25(object):
     def _init_bm25(self):
         return BM25Retriever.from_documents(self.documents)
 
+    def SaveLocalData(self, path):
+        pickle.dump(self.retriever, open(path, "wb"))
+
+    def LoadLocalData(self, path):
+        self.retriever = pickle.load(open(path, "rb"))
+
     # 获得得分在topk的文档和分数
     def GetBM25TopK(self, query, topk):
         self.retriever.k = topk
@@ -41,18 +50,18 @@ class BM25(object):
             ans.append(self.full_documents[line.metadata["id"]])
         return ans
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     # bm2.5
-    dp =  DataProcess(pdf_path = "/root/autodl-tmp/codes/data/train_a.pdf")
-    dp.ParseBlock(max_seq = 1024)
-    dp.ParseBlock(max_seq = 512)
+    dp = DataProcess(pdf_path="/root/autodl-tmp/codes/data/train_a.pdf")
+    dp.ParseBlock(max_seq=1024)
+    dp.ParseBlock(max_seq=512)
     print(len(dp.data))
-    dp.ParseAllPage(max_seq = 256)
-    dp.ParseAllPage(max_seq = 512)
+    dp.ParseAllPage(max_seq=256)
+    dp.ParseAllPage(max_seq=512)
     print(len(dp.data))
-    dp.ParseOnePageWithRule(max_seq = 256)
-    dp.ParseOnePageWithRule(max_seq = 512)
+    dp.ParseOnePageWithRule(max_seq=256)
+    dp.ParseOnePageWithRule(max_seq=512)
     print(len(dp.data))
     data = dp.data
     bm25 = BM25(data)
